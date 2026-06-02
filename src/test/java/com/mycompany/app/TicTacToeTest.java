@@ -89,4 +89,14 @@ public class TicTacToeTest {
         int score = game.minimax(true);
         assertTrue(score >= -1 && score <= 1);
     }
+
+    @Test
+public void testNoMoveAfterGameOver() {
+    game.makeMove(0);
+    game.makeMove(1);
+    game.makeMove(2); 
+    assertTrue(game.isGameOver());
+    assertFalse(game.makeMove(3));
+}
+    
 }
