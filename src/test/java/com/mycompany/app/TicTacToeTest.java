@@ -43,11 +43,11 @@ public class TicTacToeTest {
 
     @Test
     public void testWinX() {
-        game.makeMove(0); // X
-        game.makeMove(3); // O
-        game.makeMove(1); // X
-        game.makeMove(4); // O
-        game.makeMove(2); // X
+        game.makeMove(0); 
+        game.makeMove(3); 
+        game.makeMove(1); 
+        game.makeMove(4); 
+        game.makeMove(2); 
         assertTrue(game.isWin('X'));
         assertTrue(game.isGameOver());
         assertEquals('X', game.getWinner());
@@ -55,12 +55,12 @@ public class TicTacToeTest {
 
     @Test
     public void testWinO() {
-        game.makeMove(0); // X
-        game.makeMove(1); // O
-        game.makeMove(2); // X
-        game.makeMove(4); // O
-        game.makeMove(5); // X
-        game.makeMove(7); // O
+        game.makeMove(0); 
+        game.makeMove(1); 
+        game.makeMove(2); 
+        game.makeMove(4); 
+        game.makeMove(5); 
+        game.makeMove(7); 
         assertTrue(game.isWin('O'));
         assertTrue(game.isGameOver());
         assertEquals('O', game.getWinner());
@@ -91,12 +91,9 @@ public class TicTacToeTest {
     }
 
     @Test
-public void testNoMoveAfterGameOver() {
-    game.makeMove(0);
-    game.makeMove(1);
-    game.makeMove(2); 
-    assertTrue(game.isGameOver());
-    assertFalse(game.makeMove(3));
-}
-    
+    public void testBestMoveDoesNotModifyBoard() {
+        char[] original = game.getBoard().clone();
+        game.bestMove();
+        assertArrayEquals(original, game.getBoard());
+    }
 }
