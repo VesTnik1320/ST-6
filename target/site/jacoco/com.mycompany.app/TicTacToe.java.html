@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TicTacToe.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tic-tac-toe</a> &gt; <a href="index.source.html" class="el_package">com.mycompany.app</a> &gt; <span class="el_source">TicTacToe.java</span></div><h1>TicTacToe.java</h1><pre class="source lang-java linenums">package com.mycompany.app;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TicTacToe {
+    private char[] board;
+    private char currentPlayer;
+
+<span class="fc" id="L10">    public TicTacToe() {</span>
+<span class="fc" id="L11">        board = new char[9];</span>
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        for (int i = 0; i &lt; 9; i++) {</span>
+<span class="fc" id="L13">            board[i] = ' ';</span>
+        }
+<span class="fc" id="L15">        currentPlayer = 'X';</span>
+<span class="fc" id="L16">    }</span>
+
+    public boolean makeMove(int position) {
+<span class="fc bfc" id="L19" title="All 6 branches covered.">        if (position &lt; 0 || position &gt; 8 || board[position] != ' ') {</span>
+<span class="fc" id="L20">            return false;</span>
+        }
+<span class="fc" id="L22">        board[position] = currentPlayer;</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (!isGameOver()) {</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';</span>
+        }
+<span class="fc" id="L26">        return true;</span>
+    }
+
+    public boolean isGameOver() {
+<span class="fc bfc" id="L30" title="All 6 branches covered.">        return isWin('X') || isWin('O') || isBoardFull();</span>
+    }
+
+    public boolean isWin(char player) {
+<span class="fc" id="L34">        int[][] winPatterns = {</span>
+            {0,1,2}, {3,4,5}, {6,7,8},
+            {0,3,6}, {1,4,7}, {2,5,8},
+            {0,4,8}, {2,4,6}
+        };
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int[] pattern : winPatterns) {</span>
+<span class="fc bfc" id="L40" title="All 6 branches covered.">            if (board[pattern[0]] == player &amp;&amp; board[pattern[1]] == player &amp;&amp; board[pattern[2]] == player) {</span>
+<span class="fc" id="L41">                return true;</span>
+            }
+        }
+<span class="fc" id="L44">        return false;</span>
+    }
+
+    public boolean isBoardFull() {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (char c : board) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (c == ' ') return false;</span>
+        }
+<span class="fc" id="L51">        return true;</span>
+    }
+
+    public char getWinner() {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (isWin('X')) return 'X';</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (isWin('O')) return 'O';</span>
+<span class="fc" id="L57">        return ' ';</span>
+    }
+
+    public char getCurrentPlayer() {
+<span class="fc" id="L61">        return currentPlayer;</span>
+    }
+
+    public char[] getBoard() {
+<span class="fc" id="L65">        return board.clone();</span>
+    }
+
+    // Минимакс для компьютера (играет за 'O')
+    public int minimax(boolean isMaximizing) {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (isWin('O')) return 1;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (isWin('X')) return -1;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (isBoardFull()) return 0;</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (isMaximizing) {</span>
+<span class="fc" id="L75">            int best = -1000;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            for (int i = 0; i &lt; 9; i++) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                if (board[i] == ' ') {</span>
+<span class="fc" id="L78">                    board[i] = 'O';</span>
+<span class="fc" id="L79">                    best = Math.max(best, minimax(false));</span>
+<span class="fc" id="L80">                    board[i] = ' ';</span>
+                }
+            }
+<span class="fc" id="L83">            return best;</span>
+        } else {
+<span class="fc" id="L85">            int best = 1000;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            for (int i = 0; i &lt; 9; i++) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                if (board[i] == ' ') {</span>
+<span class="fc" id="L88">                    board[i] = 'X';</span>
+<span class="fc" id="L89">                    best = Math.min(best, minimax(true));</span>
+<span class="fc" id="L90">                    board[i] = ' ';</span>
+                }
+            }
+<span class="fc" id="L93">            return best;</span>
+        }
+    }
+
+    public int bestMove() {
+<span class="fc" id="L98">        int bestVal = -1000;</span>
+<span class="fc" id="L99">        int bestMove = -1;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (int i = 0; i &lt; 9; i++) {</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">            if (board[i] == ' ') {</span>
+<span class="fc" id="L102">                board[i] = 'O';</span>
+<span class="fc" id="L103">                int moveVal = minimax(false);</span>
+<span class="fc" id="L104">                board[i] = ' ';</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">                if (moveVal &gt; bestVal) {</span>
+<span class="fc" id="L106">                    bestMove = i;</span>
+<span class="fc" id="L107">                    bestVal = moveVal;</span>
+                }
+            }
+        }
+<span class="fc" id="L111">        return bestMove;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
